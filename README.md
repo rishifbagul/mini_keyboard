@@ -44,7 +44,7 @@ This file defines keyboard shortcuts and sequences that can be executed by the s
     "laptop_login": "$laptop_password &(ENTER)",
     "open_cmd_prompt": "&(WINDOWS R) &(500) cmd &(ENTER) &(2000)"
 }
-
+```
 - **`$`**: Denotes a variable that will be replaced with its corresponding value from `secret.json`.
 - **`&()`**: Denotes a special key code or a delay. For example, `&(WINDOWS R)` simulates pressing the Windows key and R, and `&(500)` introduces a 500ms delay.
 - **`!`**: Denotes a user-defined function that can be executed by the system. user-defined functions are defined in `key_functions.py`.
@@ -76,7 +76,7 @@ This file defines the menu structure and the actions associated with each menu o
         }
     }
 }
-
+```
 - **`name`**: The name of the menu option.
 - **`oled`**: The text displayed on the OLED screen for this option.
 - **`value`**: The action to be executed when the option is selected. This can be a command string or a submenu.
@@ -94,7 +94,7 @@ This file defines specific sequences of rotary encoder and button presses that t
     "RP CP CR RR": "!laptop_login",
     "RP CP CR CP CR RR": "!laptop_linux_login"
 }
-
+```
 - **Action Codes**:
   - `RP`: Right button pressed.
   - `RR`: Right button released.
