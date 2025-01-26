@@ -1,0 +1,147 @@
+{
+    "0":{
+        "name":"git lab menue",
+        "oled":"Git",
+        "value":{
+            "0":{
+                "name":"git status",
+                "oled":"status",
+                "auto_type": true,
+                "value":"git status"
+            },
+            "1":{
+                "name":"git add",
+                "oled":"add",
+                "auto_type": true,
+                "value":"git add ."
+            },
+            "2":{
+                "name":"git commit",
+                "oled":"commit",
+                "auto_type": true,
+                "value":"git commit -m \"\""
+            },
+            "3":{
+                "name":"git push",
+                "oled":"push",
+                "auto_type": true,
+                "value":"git push"
+            },
+            "4":{
+                "name":"git pull",
+                "oled":"pull",
+                "auto_type": true,
+                "value":"git pull"
+            },
+            "5":{
+                "name":"git rebase",
+                "oled":"rebase",
+                "auto_type": true,
+                "value":"git rebase master"
+            },
+            "6":{
+                "name":"rebase continue",
+                "oled":"rebase continue",
+                "auto_type": true,
+                "value":"git rebase --continue"
+            },
+            "7":{
+                "name":"rebase abort",
+                "oled":"rebase abort",
+                "auto_type": true,
+                "value":"git rebase --abort"
+            },
+            "8":{
+                "name":"git log",
+                "oled":"log",
+                "auto_type": true,
+                "value":"git log"
+            },
+            "9":{
+                "name":"git uncommit",
+                "oled":"uncommit",
+                "auto_type": true,
+                "value":"git reset --soft HEAD~"
+            },
+            "10":{
+                "name":"git checkout",
+                "oled":"checkout",
+                "auto_type": true,
+                "value":"git checkout"
+            },
+            "11":{
+                "name":"git branch",
+                "oled":"branch",
+                "auto_type": true,
+                "value":"git branch"
+            }
+        }
+    },
+    "1":{
+        "name":"ioc",
+        "oled":"IOC",
+        "value":{
+            "0":{
+                "name":"ping",
+                "oled":"ping",
+                "auto_type":true,
+                "value":"ping -t 192.168.0.100"
+            },
+            "1":{
+                "name":"login",
+                "oled":"login",
+                "auto_type":false,
+                "value":"!login_IOC"
+            },
+            "2":{
+                "name":"push ioc software",
+                "oled":"send",
+                "auto_type":false,
+                "value":"!login_IOC &(1000) ./stop.sh &(ENTER) &(500) &(CONTROL D) &(500) !scp_ioc_software !login_IOC &(1000) ./start.sh &(ENTER) &(200) &(CONTROL D)"
+            },
+            "3":{
+                "name":"setup ioc",
+                "oled":"setup",
+                "value":{
+                    "0":{
+                        "name":"QX500",
+                        "oled":"QX500",
+                        "value":{
+                            "0":{
+                                "oled":"add here",
+                                "value":"add here"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "2":{
+        "name":"windows fuctions",
+        "oled":"Windows",
+        "value":{
+            "0":{
+                "name":"network",
+                "oled":"network",
+                "value":{
+                    "0":{
+                        "name":"auto ip",
+                        "oled":"auto ip",
+                        "value": "!network_auto_ip"
+                    },
+                    "1":{
+                        "name":"ip 0_100",
+                        "oled":"ip 0_100",
+                        "value": "!network_ip_0_100"
+                    },
+                    "2":{
+                        "name":"ip 100_100",
+                        "oled":"ip 1000_100",
+                        "value": "!network_ip_100_100"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "admin_login": "$admin_username &(TAB) $admin_password &(ENTER)",
+    "laptop_login": "$laptop_password &(ENTER)",
+    "laptop_linux_login":"$laptop_linux_password &(ENTER)",
+    "open_cmd_prompt": "&(WINDOWS R) &(500) cmd &(ENTER) &(2000)",
+    "open_cmd_at_location":"&(ALT D) &(500) cmd &(ENTER)",
+    "open_cmd_prompt_as_admin": "&(WINDOWS R) &(500) cmd &(CONTROL SHIFT ENTER) &(10000) !admin_login &(2000)",
+    "close_cmd_prompt": "exit &(ENTER)",
+    "login_IOC": "ssh $ishida_ioc_ip &(ENTER) &(1000) $ishida_ioc_password &(ENTER)",
+    "clear_termial_line": "&(CONTROL U) &(ESCAPE) &(SPACE)",
+    "scp_ioc_software": "cd ~/Desktop &(ENTER) &(200) scp ishida@192.168.0.100:~/ioc/qxe ri &(500) &(TAB) &(500) &(ENTER) &(500) $ishida_ioc_password &(500) &(ENTER) &(500)",
+    "code_at_location":"&(ALT D) &(500) cmd &(ENTER) &(5000) code . &(ENTER)",
+    "network_auto_ip": "!open_cmd_prompt_as_admin netsh interface ip set address \"Ethernet\" dhcp &(ENTER) &(2000) !close_cmd_prompt",
+    "network_ip_0_100": "!open_cmd_prompt_as_admin netsh interface ip set address \"Ethernet\" static 192.168.0.89 255.255.255.0 &(ENTER) &(2000) !close_cmd_prompt",
+    "network_ip_100_100": "!open_cmd_prompt_as_admin netsh interface ip set address \"Ethernet\" static 192.168.100.89 255.255.255.0 &(ENTER) &(2000) !close_cmd_prompt"
+}
