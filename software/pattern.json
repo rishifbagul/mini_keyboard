@@ -1,0 +1,8 @@
+{
+    "RP CP CR RR": "!laptop_login",
+    "RP CP CR CP CR RR": "!laptop_linux_login",
+    "RP CP CR CP CR CP CR RR": "!admin_login",
+    "RP LP LR RR": "!open_cmd_prompt",
+    "RP LP LR LP LR RR": "!open_cmd_at_location",
+    "RP LP LR LP LR LP LR RR": "!code_at_location"
+}
