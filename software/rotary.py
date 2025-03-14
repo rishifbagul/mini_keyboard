@@ -107,6 +107,10 @@ class RotaryEncoder:
         if self.actions:
             return (self.actions[-1], self.timestamps[-1])
         return None
+    def get_last_action_time(self):
+        if self.actions:
+            return self.timestamps[-1]
+        return None
     
     def convert_to_string(self, action):
         if action == 0:
@@ -158,4 +162,7 @@ class RotaryEncoder:
             return True
         else:
             return False
-    
+    def drop_last_action(self):
+        if self.actions:
+            self.actions.pop()
+            self.timestamps.pop()
