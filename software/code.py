@@ -17,9 +17,9 @@ oled = OLED()
 encoder = RotaryEncoder()
 keyboard = KeyboardController()
 delay=delay_handler()
-pattern = json.load(open("pattern.json"))
-menu = json.load(open("scroll.json"))
-
+pattern = json.load(open("personal/pattern.json"))
+menu = json.load(open("personal/scroll.json"))
+all_access=all_access_functions(oled,encoder,keyboard,delay)
 last_action_time=0
 menu_tracker = [0]
 special_function_value=0        # 0 when no special function is active
@@ -40,7 +40,7 @@ while True:
         pattern_function = pattern_checker(pattern, encoder.actions)
         if pattern_function != None:
             oled.update_text(pattern_function)
-            keyboard.execute_code_line(pattern_function)
+            keyboard.execute_code_line(pattern_function,all_access=all_access)
         
         current_menu_index = get_nested_value(menu, menu_tracker)
 
@@ -61,7 +61,7 @@ while True:
                     special_function_value=current_index["value"]
                 else:
                     keyboard.execute_code_line("!clear_termial_line")
-                    keyboard.execute_code_line(current_index["value"])
+                    keyboard.execute_code_line(current_index["value"],all_access=all_access)
                     keyboard.execute_code_line("&(ENTER)")
         elif encoder.check_if_back_button_pressed():
             if len(menu_tracker) > 1:
@@ -73,4 +73,4 @@ while True:
         oled.print_text(current_index["oled"],x=0,y=20,scale=1)
         if "auto_type" in current_index and current_index["auto_type"]:
             keyboard.execute_code_line("!clear_termial_line")
-            keyboard.execute_code_line(current_index["value"])
+            keyboard.execute_code_line(current_index["value"],all_access=all_access)

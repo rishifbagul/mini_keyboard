@@ -105,3 +105,28 @@ class delay_handler:
         return time.monotonic()-self.last_time
     def delay_complete(self):
         return self.get_time_diff()>self.delay_set
+    
+
+class all_access_functions:
+    def __init__(self,oled_object,rotary_object,keyboard_object,delay_object):
+        self.oled=oled_object
+        self.rotary=rotary_object
+        self.keyboard=keyboard_object
+        self.delay=delay_object
+
+    def wait_for_select_button(self):
+        last_action_time = self.rotary.get_last_action_time()
+        self.oled.clear()
+        self.oled.print_text("waiting \n for \n select",x=10,y=10)
+        while not ((self.rotary.check_if_select_button_pressed() or self.rotary.check_if_back_button_pressed()) and self.rotary.get_last_action_time() != last_action_time): 
+            self.rotary.update()
+        self.oled.clear()
+        if self.rotary.check_if_select_button_pressed():
+            self.rotary.drop_last_action()
+            return True
+        else:
+            self.rotary.drop_last_action()
+            return False
+        
+
+

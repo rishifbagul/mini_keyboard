@@ -12,14 +12,15 @@ import time
 # ! is for function names
 # & is for special keycodes
 # &() is for special keycods which needs to be holded
+# &(WAIT_CLICK) is for waiting for click
 
 class KeyboardController:
     def __init__(self):
         self.keyboard = Keyboard(usb_hid.devices)
         self.keyboard_layout = KeyboardLayoutUS(self.keyboard)
         self.keycodes = dir(Keycode)
-        self.key_functions = json.load(open("key_functions.json"))
-        self.variables = json.load(open("secret.json"))
+        self.key_functions = json.load(open("personal/key_functions.json"))
+        self.variables = json.load(open("personal/secret.json"))
         self.typing_delay=0
         
 
@@ -49,7 +50,7 @@ class KeyboardController:
         #add space in front and back to avoid lots of problems
         code_line = " " + code_line + " "
         return_line = ""
-        # firstly convert all functions in code line to its values TODO currently function calls under functions are not supported
+        # firstly convert all functions in code line to its values 
         i=0
         while(i<len(code_line)):
             if code_line[i] == '!' and  code_line[i-1] != '`':
@@ -80,19 +81,23 @@ class KeyboardController:
             i+=1
         return return_line
     
-    def execute_keycodes(self, keycodes):
+    def execute_keycodes(self, keycodes,all_access=None):
         for keycode in keycodes:
             if keycode in self.keycodes:
                 self.keyboard.press(getattr(Keycode, keycode))
             elif keycode.isdigit():
                 time.sleep(int(keycode)/1000)
+            elif keycode == "WAIT_CLICK":
+                if not all_access.wait_for_select_button():
+                    return False
             else:
                 print(f"Keycode {keycode} not found")
             time.sleep(self.typing_delay)
         time.sleep(self.typing_delay)
         self.keyboard.release_all()
+        return True
     
-    def execute_code_line(self, code_line):
+    def execute_code_line(self, code_line,all_access=None):
 
         code_line = self.replace_all_functions(code_line)
         code_line = self.replace_all_variables(code_line)
@@ -100,7 +105,8 @@ class KeyboardController:
         for action in actions:
             action = action.replace("`", "")
             if action[0] == '(':
-                self.execute_keycodes(action[1:action.index(')')].split(" "))   
+                if not self.execute_keycodes(action[1:action.index(')')].split(" "),all_access) :
+                      return False  
                 self.type_string(action[action.index(')')+1:].strip())
                 # print(action[1:action.index(')')].split(" "))
                 # print(action[action.index(')')+1:])
