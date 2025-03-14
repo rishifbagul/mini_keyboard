@@ -88,12 +88,14 @@ class KeyboardController:
             elif keycode.isdigit():
                 time.sleep(int(keycode)/1000)
             elif keycode == "WAIT_CLICK":
-                all_access.wait_for_select_button()
+                if not all_access.wait_for_select_button():
+                    return False
             else:
                 print(f"Keycode {keycode} not found")
             time.sleep(self.typing_delay)
         time.sleep(self.typing_delay)
         self.keyboard.release_all()
+        return True
     
     def execute_code_line(self, code_line,all_access=None):
 
@@ -103,7 +105,8 @@ class KeyboardController:
         for action in actions:
             action = action.replace("`", "")
             if action[0] == '(':
-                self.execute_keycodes(action[1:action.index(')')].split(" "),all_access)   
+                if not self.execute_keycodes(action[1:action.index(')')].split(" "),all_access) :
+                      return False  
                 self.type_string(action[action.index(')')+1:].strip())
                 # print(action[1:action.index(')')].split(" "))
                 # print(action[action.index(')')+1:])
