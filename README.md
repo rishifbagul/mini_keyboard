@@ -46,7 +46,7 @@ This file defines keyboard shortcuts and sequences that can be executed by the s
 }
 ```
 - **`$`**: Denotes a variable that will be replaced with its corresponding value from `secret.json`.
-- **`&()`**: Denotes a special key code or a delay. For example, `&(WINDOWS R)` simulates pressing the Windows key and R, and `&(500)` introduces a 500ms delay.
+- **`&()`**: Denotes a special key code or a delay. For example, `&(WINDOWS R)` simulates pressing the Windows key and R, and `&(500)` introduces a 500ms delay. To wait for a select button to be pressed use `&(WAIT_CLICK)`.
 - **`!`**: Denotes a user-defined function that can be executed by the system. user-defined functions are defined in `key_functions.py`.
 - ** ``` ` ``` **:  charecter is used to escape above special characters.
 ---
