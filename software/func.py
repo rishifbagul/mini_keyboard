@@ -1,5 +1,7 @@
 import time
 import random
+import adafruit_hashlib as hashlib
+import binascii
 
 def pattern_checker(patterns, action):
     for key, value in patterns.items():
@@ -79,12 +81,60 @@ def press_char_to_int(key):
     
 
 ## all special functions are down here
-
-def run_special_function(function_no,keyboard_object,delay_object):
+## return if its one time function or return false to keep calling it
+def run_special_function(function_no,all_access_object):
     if (function_no==0):
-        return
+        return False
     elif (function_no==1):
-        return
+        return True
+    elif (function_no==2):
+        return all_access_object.change_password()
+        
+
+
+def is_valid_password(key_str):
+    if not (8 <= len(key_str)):
+        return False
+    return True
+
+def xor_bytes(a, b):
+    return bytes(x ^ y for x, y in zip(a, b))
+
+def crypto_process(key_str, data):
+    if not is_valid_password(key_str):
+        raise ValueError("Invalid key! Must be 8-30 digits (1-5)")
+    
+    key_bytes = key_str.encode('utf-8')
+    key_hash = hashlib.sha256(key_bytes).digest()
+    
+    result = bytearray()
+    counter = 0
+    
+    for i in range(0, len(data), 32):
+        counter_bytes = counter.to_bytes(4, 'big')
+        keystream = hashlib.sha256(key_hash + counter_bytes).digest()
+        
+        chunk = data[i:i+32]
+        processed_chunk = xor_bytes(chunk, keystream[:len(chunk)])
+        
+        result.extend(processed_chunk)
+        counter += 1
+    
+    return bytes(result)
+
+def encrypt(key_str, plaintext):
+    plain_bytes = plaintext.encode('utf-8')
+    encrypted_bytes = crypto_process(key_str, plain_bytes)
+    # Use binascii for base64 encoding
+    return binascii.b2a_base64(encrypted_bytes).decode('utf-8').strip()
+
+def decrypt(key_str, ciphertext):
+    # Use binascii for base64 decoding
+    encrypted_bytes = binascii.a2b_base64(ciphertext)
+    decrypted_bytes = crypto_process(key_str, encrypted_bytes)
+    return decrypted_bytes.decode('utf-8')
+
+
 
 
 
@@ -116,17 +166,88 @@ class all_access_functions:
 
     def wait_for_select_button(self):
         last_action_time = self.rotary.get_last_action_time()
+        self.rotary.store_action_state(2)
         self.oled.clear()
         self.oled.print_text("waiting \n for \n select",x=10,y=10)
         while not ((self.rotary.check_if_select_button_pressed() or self.rotary.check_if_back_button_pressed()) and self.rotary.get_last_action_time() != last_action_time): 
             self.rotary.update()
         self.oled.clear()
         if self.rotary.check_if_select_button_pressed():
-            self.rotary.drop_last_action()
+            self.rotary.restore_action_state()
             return True
         else:
-            self.rotary.drop_last_action()
+            self.rotary.restore_action_state()
             return False
         
+    def take_password(self,heading="Enter Password"):
+        # this is a holding function recordes all the key pressed and makes a password out of that
+        self.rotary.print_action_state()
+        last_action_time = self.rotary.get_last_action_time()
+        self.rotary.store_action_state(2)
+        password = ""
+        self.oled.clear()
+        self.oled.print_text(heading,x=10,y=25)
+        while True:
+            self.rotary.update()
+            if last_action_time != self.rotary.get_last_action_time():
+                last_action_time = self.rotary.get_last_action_time()
+                password+=str(self.rotary.get_last_action()[0])
+                self.oled.clear()
+                self.oled.print_text(f"{heading}\n{'\n'.join('*' * min(20, len(password) - i) for i in range(0, len(password), 20))}",x=10,y=25)
+                if self.rotary.check_if_select_button_pressed():
+                    #remove the last two characters from password
+                    password = password[:-2]
+                    self.rotary.restore_action_state()
+                    break
+                if len(password) > 60:
+                    break
+        self.oled.clear()
+        self.rotary.print_action_state()
+        return password
+
+    def change_password(self):
+        if(self.keyboard.password == self.take_password("Enter Current\nPassword")):
+            new_password = self.take_password("Enter New\nPassword")
+            if not is_valid_password(new_password):
+                self.oled.update_text("Password too short")
+                time.sleep(2)
+                return True
+            if self.take_password("Confirm New\nPassword") == new_password:
+                self.oled.update_text("Encoding Secret",x=10,y=25)
+                for i in self.keyboard.variables:
+                    self.keyboard.variables[i] = encrypt(new_password, self.keyboard.variables[i])
+                    print(f"Variable {i} changed to {self.keyboard.variables[i]}")
+                self.oled.update_text("Writing to\nfile",x=10,y=25)
+                if self.keyboard.write_secret_file():
+                    self.oled.update_text("Password Changed",x=10,y=25)
+                    time.sleep(2)
+                else:
+                    self.oled.update_text("Error Writing File",x=10,y=25)
+                    time.sleep(2)
+                return True
+            else:
+                self.oled.update_text("Password Not Matched")
+                time.sleep(2)
+                return True
+        else:
+            self.oled.update_text("Wrong Password")
+            time.sleep(2)
+            return True
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

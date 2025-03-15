@@ -78,6 +78,46 @@
         }
     },
     "1":{
+        "name":"ioc",
+        "oled":"IOC",
+        "value":{
+            "0":{
+                "name":"ping",
+                "oled":"ping",
+                "auto_type":false,
+                "value":"ping -t 192.168.0.100"
+            },
+            "1":{
+                "name":"login",
+                "oled":"login",
+                "auto_type":false,
+                "value":"!login_IOC"
+            },
+            "2":{
+                "name":"push ioc software",
+                "oled":"send",
+                "auto_type":false,
+                "value":"!login_IOC &(1000) ./stop.sh &(ENTER) &(500) &(CONTROL D) &(500) !scp_ioc_software !login_IOC &(1000) ./start.sh &(ENTER) &(200) &(CONTROL D)"
+            },
+            "3":{
+                "name":"setup ioc",
+                "oled":"setup",
+                "value":{
+                    "0":{
+                        "name":"QX500",
+                        "oled":"QX500",
+                        "value":{
+                            "0":{
+                                "oled":"add here",
+                                "value":"add here"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "2":{
         "name":"windows fuctions",
         "oled":"Windows",
         "value":{
@@ -101,6 +141,17 @@
                         "value": "!network_ip_100_100"
                     }
                 }
+            }
+        }
+    },
+    "3":{
+        "name":"settings",
+        "oled":"Settings",
+        "value":{
+            "0":{
+                "name":"change password",
+                "oled":"chng pass",
+                "value":2
             }
         }
     }

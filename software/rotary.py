@@ -50,7 +50,8 @@ class RotaryEncoder:
         # 7: CENTER_Released
         # 8: RIGHT_Pressed
         # 9: RIGHT_Released
-
+        self.stored_actions = []
+        self.stored_timestamps = []
     def update(self):
 
         current_clk_state = self.clk.value
@@ -166,3 +167,30 @@ class RotaryEncoder:
         if self.actions:
             self.actions.pop()
             self.timestamps.pop()
+    
+    def print_action_state(self):
+        print("Actions:")
+        for action, timestamp in zip(self.actions, self.timestamps):
+            print(f"{self.convert_to_string(action)} at {timestamp}")
+
+
+    def store_action_state(self,no_of_actions):
+        if len(self.actions) > no_of_actions:
+            self.stored_actions = self.actions[-no_of_actions:]
+            self.stored_timestamps = self.timestamps[-no_of_actions:]
+        elif len(self.actions) > 0:
+            self.stored_actions = self.actions
+            self.stored_timestamps = self.timestamps
+        else:
+            self.stored_actions = []
+            self.stored_timestamps = []
+    
+    def restore_action_state(self):
+        for action, timestamp in zip(self.stored_actions, self.stored_timestamps):
+            self._log_action(action)
+            self.timestamps[-1] = timestamp
+        if len(self.stored_actions) == 0:
+            self.actions = []
+            self.timestamps = []
+        self.stored_actions = []
+        self.stored_timestamps = []

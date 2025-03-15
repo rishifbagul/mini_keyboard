@@ -7,6 +7,7 @@ import usb_hid
 from adafruit_hid.keycode import Keycode
 import json
 import time
+import storage
 
 # $ is for variable names
 # ! is for function names
@@ -22,7 +23,7 @@ class KeyboardController:
         self.key_functions = json.load(open("personal/key_functions.json"))
         self.variables = json.load(open("personal/secret.json"))
         self.typing_delay=0
-        
+        self.password = ""
 
     def type_string(self, string):
         self.keyboard_layout.write(string,delay=self.typing_delay)
@@ -113,4 +114,17 @@ class KeyboardController:
             else:
                 self.type_string(action.strip())
                 # print(action)
-        
+    
+    def write_secret_file(self):
+        try:
+            storage.enable_usb_drive(False)
+            # Write JSON file
+            with open("/personal/secret.json", "w") as file:
+                json.dump(self.variables, file)
+            print("JSON file written successfully")
+            storage.enable_usb_drive(True)
+            return True
+            
+        except Exception as e:
+            print("Failed to write file:", str(e))
+            return False
