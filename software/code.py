@@ -6,11 +6,7 @@ import digitalio
 import time
 from keyboard import *
 from func import *
-
-
-
-
-
+import supervisor
 
 
 oled = OLED()
@@ -24,18 +20,22 @@ last_action_time=0
 menu_tracker = [0]
 special_function_value=0        # 0 when no special function is active
 current_index,oled_text,menu_width=get_nested_value(menu,menu_tracker)
+keyboard.set_password(all_access.take_password())
+
+
+
 while True:
     encoder.update()
-    run_special_function(special_function_value,keyboard_object=keyboard,delay_object=delay)
+    if run_special_function(special_function_value,all_access_object=all_access):
+        special_function_value=0
     if  encoder.timestamps and last_action_time != encoder.timestamps[-1]:
         last_action_time = encoder.timestamps[-1]
-        
         # stop the running special function
         special_function_value=0
         # for i in range(10):
         #     #keyboard.execute_code_line("2")
         #     keyboard.press_special_key(Keycode.a)
-
+ 
         # check patterns
         pattern_function = pattern_checker(pattern, encoder.actions)
         if pattern_function != None:
