@@ -2,6 +2,7 @@ import time
 import random
 import adafruit_hashlib as hashlib
 import binascii
+import supervisor
 
 def pattern_checker(patterns, action):
     for key, value in patterns.items():
@@ -88,7 +89,7 @@ def run_special_function(function_no,all_access_object):
     elif (function_no==1):
         return True
     elif (function_no==2):
-        return all_access_object.change_password()
+        supervisor.reload()
         
 
 
@@ -101,8 +102,6 @@ def xor_bytes(a, b):
     return bytes(x ^ y for x, y in zip(a, b))
 
 def crypto_process(key_str, data):
-    if not is_valid_password(key_str):
-        raise ValueError("Invalid key! Must be 8-30 digits (1-5)")
     
     key_bytes = key_str.encode('utf-8')
     key_hash = hashlib.sha256(key_bytes).digest()
@@ -205,35 +204,7 @@ class all_access_functions:
         self.rotary.print_action_state()
         return password
 
-    def change_password(self):
-        if(self.keyboard.password == self.take_password("Enter Current\nPassword")):
-            new_password = self.take_password("Enter New\nPassword")
-            if not is_valid_password(new_password):
-                self.oled.update_text("Password too short")
-                time.sleep(2)
-                return True
-            if self.take_password("Confirm New\nPassword") == new_password:
-                self.oled.update_text("Encoding Secret",x=10,y=25)
-                for i in self.keyboard.variables:
-                    self.keyboard.variables[i] = encrypt(new_password, self.keyboard.variables[i])
-                    print(f"Variable {i} changed to {self.keyboard.variables[i]}")
-                self.oled.update_text("Writing to\nfile",x=10,y=25)
-                if self.keyboard.write_secret_file():
-                    self.oled.update_text("Password Changed",x=10,y=25)
-                    time.sleep(2)
-                else:
-                    self.oled.update_text("Error Writing File",x=10,y=25)
-                    time.sleep(2)
-                return True
-            else:
-                self.oled.update_text("Password Not Matched")
-                time.sleep(2)
-                return True
-        else:
-            self.oled.update_text("Wrong Password")
-            time.sleep(2)
-            return True
-    
+
 
 
 

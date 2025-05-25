@@ -6,6 +6,7 @@ import digitalio
 import time
 from keyboard import *
 from func import *
+import supervisor
 
 
 oled = OLED()
@@ -19,7 +20,7 @@ last_action_time=0
 menu_tracker = [0]
 special_function_value=0        # 0 when no special function is active
 current_index,oled_text,menu_width=get_nested_value(menu,menu_tracker)
-keyboard.password = all_access.take_password()
+keyboard.set_password(all_access.take_password())
 
 
 

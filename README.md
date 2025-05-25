@@ -127,6 +127,40 @@ This file defines specific sequences of rotary encoder and button presses that t
 
 ---
 
+## Encryption Tool and Secret File Security for version 1.0.1 and higher 
+
+there is new encryption tool to enhance the security of your secret credentials. Now, before using the mini keyboard, you must encrypt your `secret` file using the provided Python encryption tool.
+
+### How to Use the Encryption Tool
+
+1. **Locate the Encryption Tool**:
+   - The encryption tool is located in the `encryption_tool` folder as `encrypt_secret.py`.
+
+2. **Prepare Your Secret File**:
+   - Place your unencrypted secret file (e.g., `secret_.json`) in the same `encryption_tool` folder as `encrypt_secret.py`.
+
+3. **Run the Encryption Tool**:
+   - Open a terminal and navigate to the `encryption_tool` directory.
+   - Run the encryption tool with:
+     ```bash
+     python encrypt_secret.py
+     ```
+   - The tool will prompt you to enter the name of your secret file (e.g., `secret_.json`).
+   - You will then be asked to enter a password. Use the arrow keys and the `a` and `d` keys as instructed by the tool to input your password.
+
+4. **Copy the Encrypted File**:
+   - After successful encryption, a new `secret.json` file will be generated in the `encryption_tool` folder.
+   - Copy this `secret.json` file to the `personal` folder on your Pico (i.e., `software/personal/secret.json`).
+
+5. **Password Required on Startup**:
+   - Remember the password you set during encryption. The Pico will prompt you for this password every time you start the mini keyboard.
+
+**Note:** If you forget your password, you will need to re-encrypt your secret file and update the `secret.json` on your Pico.
+
+---
+
+
+
 ## Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request with your changes. Ensure that your code follows the project's coding standards and includes appropriate documentation.
@@ -145,4 +179,4 @@ This project is licensed under the Open Source MIT License.
 
 ---
 
-Feel free to explore the code, customize it for your needs, and contribute to its development!
+

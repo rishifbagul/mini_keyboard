@@ -149,8 +149,8 @@
         "oled":"Settings",
         "value":{
             "0":{
-                "name":"change password",
-                "oled":"chng pass",
+                "name":"log out",
+                "oled":"log out",
                 "value":2
             }
         }
